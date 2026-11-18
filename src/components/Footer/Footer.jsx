@@ -16,7 +16,7 @@ function Footer() {
       <ul className="footer__contact">
         <li>
           <a href={studio.github} target="_blank" rel="noreferrer noopener">
-            GitHub · 1077553201
+            GitHub · {studio.githubLabel}
           </a>
         </li>
         <li>

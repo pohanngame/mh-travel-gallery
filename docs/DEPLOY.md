@@ -5,7 +5,7 @@
 
 | 项 | 值 |
 | --- | --- |
-| 仓库 | `github.com/1077553201/mh-travel-gallery` |
+| 仓库 | `github.com/pohanngame/mh-travel-gallery`（fork 自 `1077553201/mh-travel-gallery`） |
 | 生产分支 | `blockchain`（不是 `main`，填错会 404） |
 | 框架预设 | `Vite` |
 | 构建命令 | `npm run build` |
@@ -49,6 +49,19 @@ npx wrangler pages deploy dist --project-name blockchain-workshop
 第一次会要求浏览器登录 Cloudflare 授权。这条路径**不会自动更新**，每次改完都要重新执行一遍。
 
 也可以把 `dist` 文件夹整个拖进 Dashboard 的 Upload assets 页面，效果一样。
+
+---
+
+## 关于这是一个 fork
+
+本仓库是 `1077553201/mh-travel-gallery` 的 fork，上游是**接手改造前的旧版**。
+
+- 仓库页会出现「N commits ahead of」和右上角的 **Sync fork → Update branch**。**不要点。**
+  同步是把上游提交合并进来，会把改造前的旧文件（旅行画廊主题的 `docs/PLAN.md`、旧 tokens 等）带回来，
+  还可能制造一批无意义的合并提交。你不是落后，你是领先。
+- 真要取上游某个改动，用 `git cherry-pick <sha>` 单独挑，别整分支同步。
+- fork 关系不能解除。想让仓库页不显示「forked from …」，只能删库重建：新建空仓库，
+  `git remote set-url` 指过去，`git push --all` + `git push --tags`。
 
 ---
 

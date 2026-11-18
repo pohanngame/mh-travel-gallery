@@ -101,7 +101,7 @@ function Join() {
               target="_blank"
               rel="noreferrer noopener"
             >
-              GitHub · 1077553201
+              GitHub · {studio.githubLabel}
               <span aria-hidden="true">↗</span>
             </a>
           </div>

@@ -44,7 +44,10 @@ export const studio = {
   photo: '/photos/workshop.jpg',
   photoAlt: '工坊成员在 2025 一带一路暨金砖国家技能大赛区块链应用开发与运维赛项闭幕式上合影，手持获奖证书',
   photoCaption: '2025.10 金砖国家技能大赛 · 闭幕式',
-  github: 'https://github.com/1077553201',
+  // 指向仓库而不是个人主页：访客点进来是想看这个站怎么写的，
+  // 落到一个陌生用户的仓库列表上没有信息量。
+  github: 'https://github.com/pohanngame/mh-travel-gallery',
+  githubLabel: '源码',
   email: 'mh111514@outlook.com',
   // 报名邮件：主题与正文预填进 mailto，学生点「写信报名」后光标停在已写好的正文里。
   // 只预填空骨架，不写成"范文"——新生照抄一段假话，比空着更没有信息量。
