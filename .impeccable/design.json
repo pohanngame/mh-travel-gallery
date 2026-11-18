@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T01:07:16Z",
+  "title": "Design System: 区块链工坊 Blockchain Workshop",
+  "extensions": {
+    "colorMeta": {
+      "gold-accent": {
+        "role": "primary",
+        "displayName": "鎏金 Bronze",
+        "canonical": "#C9A227",
+        "tonalRamp": [
+          "#2B2617",
+          "#5D4F21",
+          "#927828",
+          "#CAA42C",
+          "#DABB57",
+          "#E0CC8D",
+          "#E9DFC0",
+          "#F6F4EE"
+        ]
+      },
+      "gold-bright": {
+        "role": "primary",
+        "displayName": "飞檐暖金 Bright Gold",
+        "canonical": "#FFD782",
+        "tonalRamp": [
+          "#302712",
+          "#6C4F12",
+          "#AB790F",
+          "#F0A506",
+          "#FABC37",
+          "#F4CD79",
+          "#F3DFB6",
+          "#F8F4ED"
+        ]
+      },
+      "vermilion-award": {
+        "role": "secondary",
+        "displayName": "朱红 Vermilion",
+        "canonical": "#FF5C35",
+        "tonalRamp": [
+          "#301812",
+          "#6C2412",
+          "#AB2D0F",
+          "#F03306",
+          "#FA5D37",
+          "#F49179",
+          "#F3C2B6",
+          "#F8EFED"
+        ]
+      },
+      "jade-chain": {
+        "role": "tertiary",
+        "displayName": "青绿 Jade",
+        "canonical": "#2FA36B",
+        "tonalRamp": [
+          "#192921",
+          "#265840",
+          "#32885E",
+          "#3ABB7D",
+          "#63CE9A",
+          "#95D8B8",
+          "#C4E5D5",
+          "#EFF5F2"
+        ]
+      },
+      "ink-navy": {
+        "role": "neutral",
+        "displayName": "墨蓝 Ink Navy",
+        "canonical": "#1B2A4E",
+        "tonalRamp": [
+          "#0E1422",
+          "#16203A",
+          "#1B2A4E",
+          "#2C4068",
+          "#455B87",
+          "#7386A9",
+          "#A9B6CB",
+          "#E4E8EF"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "宣纸 Paper",
+        "canonical": "#FBF8F1",
+        "tonalRamp": [
+          "#2A2721",
+          "#4A463C",
+          "#6E6A5E",
+          "#948F80",
+          "#B8B3A4",
+          "#D6D2C6",
+          "#EAE6DB",
+          "#FBF8F1"
+        ]
+      },
+      "ink-void": {
+        "role": "neutral",
+        "displayName": "虚空 Ink Void",
+        "canonical": "#0A0E17",
+        "tonalRamp": [
+          "#05070B",
+          "#0A0E17",
+          "#1A2332",
+          "#2C3A50",
+          "#455673",
+          "#6B7C99",
+          "#A6B2C6",
+          "#E6EAF0"
+        ]
+      },
+      "text-body": {
+        "role": "neutral",
+        "displayName": "灰墨 Body Ink",
+        "canonical": "#4A5568",
+        "tonalRamp": [
+          "#1F2024",
+          "#373D47",
+          "#50596A",
+          "#67768E",
+          "#8894A9",
+          "#ACB4C1",
+          "#CFD3D9",
+          "#F1F2F3"
+        ]
+      },
+      "text-muted": {
+        "role": "neutral",
+        "displayName": "淡墨 Muted Ink",
+        "canonical": "#8A93A6",
+        "tonalRamp": [
+          "#24272C",
+          "#3C4149",
+          "#565C66",
+          "#717884",
+          "#8A93A6",
+          "#AEB6C5",
+          "#D0D6DF",
+          "#F1F3F6"
+        ]
+      },
+      "paper-deep": {
+        "role": "neutral",
+        "displayName": "宣纸暗部 Paper Deep",
+        "canonical": "#F1ECDF",
+        "tonalRamp": [
+          "#2B2820",
+          "#4B463A",
+          "#6F6857",
+          "#958C77",
+          "#B7AE99",
+          "#D3CBB8",
+          "#E6E0D1",
+          "#F1ECDF"
+        ]
+      },
+      "paper-field": {
+        "role": "neutral",
+        "displayName": "页面暖米灰 Field",
+        "canonical": "#F4F2EE",
+        "tonalRamp": [
+          "#2A2925",
+          "#494740",
+          "#6C6960",
+          "#8F8B80",
+          "#B0ACA1",
+          "#CFCBC1",
+          "#E4E1DA",
+          "#F4F2EE"
+        ]
+      },
+      "glass-white": {
+        "role": "neutral",
+        "displayName": "纸上白膜 Glass White",
+        "canonical": "rgba(255, 255, 255, 0.6)",
+        "tonalRamp": [
+          "#333333",
+          "#5C5C5C",
+          "#858585",
+          "#ADADAD",
+          "#C9C9C9",
+          "#DEDEDE",
+          "#EFEFEF",
+          "#FBFBFB"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "主标题 Display",
+        "purpose": "仅首屏「区块链工坊」。5 字在 28vw 内不换行的上限。"
+      },
+      "headline": {
+        "displayName": "区块标题 Headline",
+        "purpose": "六个内容区块的衬线大标题。"
+      },
+      "title": {
+        "displayName": "题字 Title",
+        "purpose": "成员姓名、卡片标题、奖项名。"
+      },
+      "body": {
+        "displayName": "正文 Body",
+        "purpose": "简介与说明段落，行宽 46–56ch。"
+      },
+      "label": {
+        "displayName": "标签 Label",
+        "purpose": "栏目标签、辅助说明、键盘提示；宽字距。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient-low",
+        "value": "0 8px 32px rgba(27,42,78,0.10)",
+        "purpose": "卡片静态投影，把卡从纸面提起约 1mm。"
+      },
+      {
+        "name": "hover-lift",
+        "value": "0 18px 40px rgba(166,124,46,0.18)",
+        "purpose": "成员卡悬停的暖色投影，与金描边同时出现。"
+      },
+      {
+        "name": "plate-float",
+        "value": "0 32px 64px -28px rgba(0,0,0,0.78), 0 0 46px -14px rgba(255,215,130,0.22)",
+        "purpose": "仅开机墨玉牌。冷黑外投影 + 极淡金辉。"
+      },
+      {
+        "name": "inset-panel",
+        "value": "inset 6px 6px 12px rgba(174,174,192,0.40), inset -6px -6px 12px rgba(255,255,255,0.90)",
+        "purpose": "遗留：关于区块事实清单面板，待迁移为纸色面板 + 1px 金线。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-smooth",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "全站默认缓动：位移、颜色、卡片抬升。"
+      },
+      {
+        "name": "dur-hover",
+        "value": "280ms",
+        "purpose": "卡片与按钮的状态过渡。"
+      },
+      {
+        "name": "dur-reveal",
+        "value": "500ms",
+        "purpose": "滚动淡入（IntersectionObserver 阈值 0.15，同组 80ms 递增）。"
+      },
+      {
+        "name": "hero-in",
+        "value": "880ms / 错峰 60-150-320-460ms",
+        "purpose": "首屏文案 blur→清晰、12px 上浮落位。"
+      },
+      {
+        "name": "boot-timeline",
+        "value": "lockStart 1.05s / edgeStart 1.2s / paperFade 2.0-3.8s / dissolve 3.8s",
+        "purpose": "开机动画四阶段；溶解必须等速等尺寸，不得推镜。"
+      },
+      {
+        "name": "ink-tau",
+        "value": "110ms",
+        "purpose": "墨池聚光跟随阻尼：越大越重。"
+      },
+      {
+        "name": "card-tau",
+        "value": "240ms",
+        "purpose": "墨玉牌 / 文案区三维姿态阻尼，进场后幅度 ×0.34。"
+      },
+      {
+        "name": "art-tau",
+        "value": "300ms",
+        "purpose": "右区画卷视差阻尼，比光斑更慢，产生沉的画面感。"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "container",
+        "value": "1200px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "全站唯一主 CTA「认识我们 →」，墨底宣纸字，胶囊形，带指针磁吸。",
+      "html": "<button class=\"ds-btn-primary\">认识我们 →</button>",
+      "css": ".ds-btn-primary{font-family:var(--font-sans,'Noto Sans SC',sans-serif);font-size:16px;padding:12px 32px;border:1px solid transparent;border-radius:999px;background:#1B2A4E;color:#F7F3EA;letter-spacing:.02em;cursor:pointer;transition:color .45s ease,background-color .45s ease,box-shadow 280ms cubic-bezier(0.22,1,0.36,1)}.ds-btn-primary:hover{box-shadow:0 12px 28px rgba(27,42,78,.18),0 0 0 1px rgba(201,162,39,.55);transform:translateY(-2px)}.ds-btn-primary:focus-visible{outline:2px solid #C9A227;outline-offset:3px}"
+    },
+    {
+      "name": "Section Header",
+      "kind": "custom",
+      "refersTo": "headline",
+      "description": "区块头部：12px 大写宽距标签 + 衬线大标题 + 一段 56ch 内说明。",
+      "html": "<div class=\"ds-sechead\"><p class=\"ds-sechead-label\">MEMBERS</p><h2 class=\"ds-sechead-title\">主力成员</h2><p class=\"ds-sechead-desc\">24 级在校生，围绕竞赛、算力运维与跨方向探索推进。</p></div>",
+      "css": ".ds-sechead{max-width:56ch}.ds-sechead-label{margin:0 0 8px;font-size:12px;font-weight:500;line-height:1.8;letter-spacing:.12em;text-transform:uppercase;color:#8A93A6}.ds-sechead-title{margin:0 0 12px;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:clamp(28px,4vw,52px);font-weight:700;line-height:1.2;color:#1B2A4E}.ds-sechead-desc{margin:0;font-size:16px;line-height:1.8;color:#4A5568}"
+    },
+    {
+      "name": "Member Card",
+      "kind": "card",
+      "refersTo": "card-member",
+      "description": "成员卡：4:5 头像区 + 姓名/角色/技能标签；无照片回退首字图章；负责人顶部金线。",
+      "html": "<article class=\"ds-member\"><div class=\"ds-member-avatar\"><span class=\"ds-member-mono\">木</span></div><div class=\"ds-member-body\"><h3 class=\"ds-member-name\">木合塔尔 <small>24 级</small></h3><p class=\"ds-member-role\">负责人</p><ul class=\"ds-member-tags\"><li>Agent 开发</li><li>全栈开发</li></ul></div></article>",
+      "css": ".ds-member{width:260px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.8);border-radius:20px;box-shadow:0 8px 32px rgba(27,42,78,.10);overflow:hidden;transition:transform 280ms cubic-bezier(0.22,1,0.36,1),box-shadow 280ms cubic-bezier(0.22,1,0.36,1),border-color 280ms}.ds-member:hover{transform:translateY(-8px);border-color:#C9A227;box-shadow:0 8px 32px rgba(27,42,78,.10),0 18px 40px rgba(166,124,46,.18)}.ds-member-avatar{aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 50% 0%,rgba(255,215,130,.28),transparent 70%),linear-gradient(160deg,#FBF8F1,#F1ECDF);border-bottom:1px solid rgba(27,42,78,.14)}.ds-member-mono{font-family:var(--font-serif,'Noto Serif SC',serif);font-size:84px;font-weight:700;line-height:1;color:#B08E35;text-shadow:0 2px 0 rgba(255,255,255,.7)}.ds-member-body{padding:24px}.ds-member-name{margin:0;display:flex;align-items:baseline;gap:8px;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:26px;font-weight:600;line-height:1.3;color:#1B2A4E}.ds-member-name small{font-family:var(--font-sans,sans-serif);font-size:12px;font-weight:400;letter-spacing:.06em;color:#8A93A6}.ds-member-role{margin:2px 0 16px;font-size:14px;letter-spacing:.04em;color:#A67C2E}.ds-member-tags{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}.ds-member-tags li{font-size:13px;line-height:1.5;padding:3px 10px;border-radius:8px;color:#1B2A4E;background:rgba(27,42,78,.06);border:1px solid rgba(27,42,78,.12)}"
+    },
+    {
+      "name": "Resource Card",
+      "kind": "card",
+      "refersTo": "card-resource",
+      "description": "资源卡：编辑排版式，左侧 3px 金竖线 + 衬线序号，悬停只提底色不加阴影。",
+      "html": "<article class=\"ds-res\"><span class=\"ds-res-idx\">01</span><h3 class=\"ds-res-title\">实验实训场地</h3><p class=\"ds-res-sum\">三间高配置电脑实训室 + 两间学生专属工作室。</p><ul class=\"ds-res-items\"><li>3 间高配置电脑实训室</li><li>2 间学生工作室</li></ul></article>",
+      "css": ".ds-res{width:280px;padding:24px;background:rgba(255,255,255,.5);border:1px solid rgba(27,42,78,.14);border-left:3px solid rgba(201,162,39,.75);border-radius:8px;transition:background-color 280ms cubic-bezier(0.22,1,0.36,1),border-color 280ms,transform 280ms}.ds-res:hover{background:rgba(255,255,255,.78);border-color:rgba(201,162,39,.55);transform:translateY(-3px)}.ds-res-idx{display:block;margin-bottom:8px;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:13px;letter-spacing:.14em;color:#A67C2E}.ds-res-title{margin:0 0 8px;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:22px;font-weight:600;line-height:1.35;color:#1B2A4E}.ds-res-sum{margin:0 0 16px;font-size:14.5px;line-height:1.8;color:#4A5568}.ds-res-items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ds-res-items li{position:relative;padding-left:16px;font-size:14px;line-height:1.7;color:#1B2A4E}.ds-res-items li::before{content:'';position:absolute;left:0;top:.72em;width:6px;height:1px;background:#C9A227}"
+    },
+    {
+      "name": "Skill Chip",
+      "kind": "chip",
+      "refersTo": "chip-tag",
+      "description": "技能标签：墨蓝 6% 底 + 12% 描边，像纸上的小批注。",
+      "html": "<span class=\"ds-chip\">区块链部署与运维</span>",
+      "css": ".ds-chip{display:inline-block;font-family:var(--font-sans,'Noto Sans SC',sans-serif);font-size:13px;line-height:1.5;padding:3px 10px;border-radius:8px;color:#1B2A4E;background:rgba(27,42,78,.06);border:1px solid rgba(27,42,78,.12)}"
+    },
+    {
+      "name": "Level Badge",
+      "kind": "chip",
+      "refersTo": "badge-level",
+      "description": "奖项级别徽标：国家级金底深字，省级透明底金描边，知识产权虚线。",
+      "html": "<span class=\"ds-level\" data-level=\"国家级\">国家级</span>",
+      "css": ".ds-level{display:inline-block;font-size:11px;letter-spacing:.06em;padding:2px 8px;border-radius:8px;border:1px solid rgba(166,124,46,.4);color:#A67C2E;background:transparent;white-space:nowrap}.ds-level[data-level='国家级']{background:linear-gradient(135deg,#F7DFA4,#C9A227);border-color:transparent;color:#3D2F0A;font-weight:600}.ds-level[data-level='知识产权']{border-style:dashed;color:#8A93A6;border-color:rgba(27,42,78,.14)}"
+    },
+    {
+      "name": "Timeline Item",
+      "kind": "custom",
+      "refersTo": "title",
+      "description": "成果时间线：金轴 + 圆环节点 + 日期左栏；轴线只画到最后一节点。",
+      "html": "<ol class=\"ds-tl\"><li><span class=\"ds-tl-date\">2026.07</span><div class=\"ds-tl-body\"><div class=\"ds-tl-top\"><span class=\"ds-tl-level\">国家级</span><h3 class=\"ds-tl-title\">海峡两岸暨港澳地区大学生计算机创新作品赛</h3></div><p class=\"ds-tl-note\">总决赛 · 高职组 · 三等奖</p></div></li></ol>",
+      "css": ".ds-tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:24px}.ds-tl li{position:relative;display:grid;grid-template-columns:96px 1fr;gap:24px;padding-left:22px}.ds-tl li::before{content:'';position:absolute;left:5px;top:10px;bottom:-24px;width:1px;background:linear-gradient(to bottom,rgba(201,162,39,.7),rgba(27,42,78,.14))}.ds-tl li:last-child::before{display:none}.ds-tl li::after{content:'';position:absolute;left:0;top:8px;width:11px;height:11px;border-radius:50%;background:#FBF8F1;border:2px solid #C9A227;box-shadow:0 0 0 3px rgba(201,162,39,.12)}.ds-tl-date{font-family:var(--font-serif,'Noto Serif SC',serif);font-size:13px;letter-spacing:.1em;color:#A67C2E;padding-top:4px}.ds-tl-body{border-bottom:1px dashed rgba(27,42,78,.14);padding-bottom:24px}.ds-tl li:last-child .ds-tl-body{border-bottom:none;padding-bottom:0}.ds-tl-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}.ds-tl-level{font-size:11px;letter-spacing:.06em;padding:2px 8px;border-radius:8px;background:linear-gradient(135deg,#F7DFA4,#C9A227);color:#3D2F0A;font-weight:600}.ds-tl-title{margin:0;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:19px;font-weight:600;line-height:1.5;color:#1B2A4E}.ds-tl-note{margin:8px 0 0;font-size:14.5px;line-height:1.8;color:#4A5568}"
+    },
+    {
+      "name": "Join Card",
+      "kind": "card",
+      "refersTo": "card-member",
+      "description": "联系方式卡：白膜底 + 30% 金描边，悬停上浮 3px、值转朱红。",
+      "html": "<a class=\"ds-join\" href=\"mailto:mh111514@outlook.com\"><span class=\"ds-join-k\">EMAIL</span><span class=\"ds-join-v\">mh111514@outlook.com</span><span class=\"ds-join-hint\">项目合作 / 报名咨询</span></a>",
+      "css": ".ds-join{display:flex;flex-direction:column;gap:2px;padding:16px 24px;border-radius:20px;background:rgba(255,255,255,.72);border:1px solid rgba(201,162,39,.3);box-shadow:0 6px 20px rgba(166,124,46,.10);text-decoration:none;transition:transform 280ms cubic-bezier(0.22,1,0.36,1),box-shadow 280ms}.ds-join:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(166,124,46,.18)}.ds-join:hover .ds-join-v{color:#FF5C35}.ds-join-k{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#A67C2E}.ds-join-v{font-family:var(--font-serif,'Noto Serif SC',serif);font-size:19px;font-weight:600;color:#1B2A4E;word-break:break-all;transition:color 280ms}.ds-join-hint{font-size:13px;color:#8A93A6}"
+    },
+    {
+      "name": "Boot Plate",
+      "kind": "custom",
+      "refersTo": "plate-boot",
+      "description": "签名组件：暗场墨玉牌。深石板底 + 1px 金线 + 四角金角，透明度由 1 - --bootReveal 门控。",
+      "html": "<div class=\"ds-plate\"><p class=\"ds-plate-label\">BLOCKCHAIN WORKSHOP · 区块链工坊</p><h1 class=\"ds-plate-title\">区块链工坊</h1><p class=\"ds-plate-sub\">把链上技术做成能跑起来的东西。</p></div>",
+      "css": ".ds-plate{width:420px;padding:34px 38px;border:1px solid rgba(255,215,130,.28);border-radius:3px;background-color:rgba(14,20,32,.55);background-image:linear-gradient(160deg,rgba(38,52,72,.6) 0%,rgba(16,23,36,.28) 58%,rgba(8,12,20,.5) 100%);box-shadow:inset 0 1px 0 rgba(255,236,190,.18),inset 0 0 46px rgba(6,10,18,.55),0 32px 64px -28px rgba(0,0,0,.78),0 0 46px -14px rgba(255,215,130,.22)}.ds-plate-label{margin:0 0 24px;font-family:var(--font-sans,sans-serif);font-size:13px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:#E8C97E}.ds-plate-title{margin:0 0 24px;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:68px;font-weight:700;line-height:1.1;letter-spacing:-.02em;color:#F5F2EB}.ds-plate-sub{margin:0;font-family:var(--font-serif,'Noto Serif SC',serif);font-size:18px;line-height:1.9;color:#CBD5E1}"
+    }
+  ],
+  "narrative": {
+    "northStar": "鎏金手稿（The Gilded Manuscript）",
+    "overview": "这套系统把页面当成一册摊开的手稿：纸是地，墨是字，金是笔，画藏在纸背。首屏不是一张 hero 图，而是一张宣纸——左侧留白承载文案，光不是装饰而是「揭开」的工具：光标移到哪，纸下的淡彩壁画就在哪显影，移开又缓缓沉回去。整站的贵气来自材质的克制，不来自装饰的堆叠。\n\n密度是低的。区块之间 96–128px 的呼吸，正文单栏不超过 56ch，标题用衬线大字压住版面，其余全部退成 1px 细线与小号无衬线。贵金属出现得极少：眉标、界尺、时间线节点、国家级奖项徽标——正因为稀有，才读得出分量。",
+    "keyCharacteristics": [
+      "纸色底（#FBF8F1 → #F1ECDF 竖向渐变），从不使用纯白页面底",
+      "衬线标题 + 无衬线正文的二级字体制，靠字号而非字重拉层级",
+      "鎏金 ≤10% 覆盖，只做点睛与结构刻度",
+      "1px 细线分隔，几乎不用阴影表达层级",
+      "动效集中火力在首屏，正文区只有滚动淡入与卡片微抬"
+    ],
+    "rules": [
+      {
+        "name": "The Ten Percent Rule",
+        "body": "鎏金在任意一屏的覆盖面积不超过 10%。判定方法：眯眼看截图，金色应该是「几个点与几条线」，不是「一层调子」。超过就说明装饰在替代结构。",
+        "section": "colors"
+      },
+      {
+        "name": "The No-White Rule",
+        "body": "页面里没有纯白面。需要「更亮」时用 #FBF8F1，需要「更实」时用 rgba(255,255,255,0.5~0.78) 叠在纸色上。纯白只允许出现在墨图的透明区里，作为 multiply 的中性值。",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink-Only-on-Dark Rule",
+        "body": "#FFD782 与 #0A0E17 是一对，只能同场出现（开机暗场、墨玉牌）。纸面上需要金色时一律降级为 #C9A227。",
+        "section": "colors"
+      },
+      {
+        "name": "The Tracking Rule",
+        "body": "小字必宽距。12–13px 的标签字距 ≥0.12em，眉标 0.3em。大标题反向收 -0.02em。同一屏里出现两种字距的标签，视为错误。",
+        "section": "typography"
+      },
+      {
+        "name": "The One Typeface Per Line Rule",
+        "body": "一行文字只用一种字族。不做「中文衬线 + 英文无衬线」的混排。",
+        "section": "typography"
+      },
+      {
+        "name": "The Line-Before-Shadow Rule",
+        "body": "需要分隔或强调时，先加 1px 线，不够再加底色，最后才考虑阴影。阴影不能单独承担结构。",
+        "section": "elevation"
+      },
+      {
+        "name": "The No-Grey-Plate Rule",
+        "body": "暗场里的承载物必须是「深石板色 + 金线」，不能是纸色或灰色的实心块。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do 让金色保持稀有：任意一屏覆盖 ≤10%，眯眼看去应是点与线，不是一层调子。",
+      "Do 用纸色与 1px 线建立结构；需要更强的层次时才动阴影。",
+      "Do 把所有 hover / 视差 / 倾斜动效挂在 html[data-booted] 之后，进场前恒为 0，并在 prefers-reduced-motion 下整体关闭。",
+      "Do 新增文案先进 src/data/studio.js，新增动效参数先进 interactConfig.js / bootConfig.js，组件里不留魔法数字。",
+      "Do 新增区块沿用「12px 大写标签 + 衬线大标题 + 一段 56ch 内的说明」这一头部结构。",
+      "Do 深色底上的金一律用 #FFD782，纸面上的金一律用 #C9A227。",
+      "Do 图片素材保持「纸白底 + 淡彩/淡墨」，混合模式用 multiply；换图后检查空白区是否为纯白 255。"
+    ],
+    "donts": [
+      "Don't 使用纯白 #FFFFFF 作为卡片或页面底。",
+      "Don't 新增 backdrop-filter 玻璃卡或新拟态内阴影；既有两处待迁移，不要再扩散。",
+      "Don't 在暗场里用纸色/灰色实心块托底——会显形为灰板子。",
+      "Don't 修改 bootConfig.imageAlign、.boot__art 与 .hero__art 的 68vw 尺寸或 mask 规则；这是零跳变移交的硬约束。",
+      "Don't 用彩色照片或高饱和插画做墨层；multiply 会把它烧成色块。",
+      "Don't 给聚光加 border-radius 硬边或单层径向渐变；必须有 5 级以上的衰减。",
+      "Don't 在正文区新增全局粒子、鼠标拖尾、3D 翻转等「整站联动」效果。",
+      "Don't 引入 UI 库、动画库、Tailwind 或任何需要改 vite.config.js 的依赖——Cloudflare Pages 静态部署是硬约束。",
+      "Don't 使用「赋能 / 引领 / 打造 / 一站式」这类无法核验的措辞。"
+    ]
+  }
+}
