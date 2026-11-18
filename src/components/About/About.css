@@ -1,4 +1,5 @@
-/* 移动优先：基础样式 = 手机（< 640px），事实清单在段落下方 */
+/* 移动优先：基础样式 = 手机（< 640px），档案卡在段落下方 */
+
 .about {
   padding-block: var(--space-16);
   padding-inline: var(--page-pad);
@@ -29,8 +30,18 @@
   gap: var(--space-8);
 }
 
+/* 左栏：正文 + 三条主线。桌面端靠这一栏吃掉档案卡之外的全部宽度，
+   并在正文下方补上内容——否则正文只有两段，右卡却到 460px 高，
+   左下方会留下约 120px 的空洞。 */
+.about__col {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
 .about__text {
-  flex: 1;
   font-family: var(--font-sans);
   font-size: 17px;
   font-weight: 400;
@@ -42,26 +53,286 @@
   margin-top: var(--space-4);
 }
 
-/* 新拟态凹陷面板：工坊事实清单（键值成对竖排） */
-.about__facts {
+/* ── 三条主线：正文之下分「壹 / 贰 / 叁」三条批注 ──────────────
+   与档案卡同属"手稿"语汇：卡是抄条目，这里是分批注，用分卷序号区分。
+   桌面端整块参与纵向分配（flex: 1），三条目把余量摊平，
+   底边自然落到档案卡底边——正文比卡短多少都不会留下空洞。 */
+.about__tracks {
   list-style: none;
+  border-top: 1px solid var(--color-line);
+}
+
+.about__track {
+  position: relative;
+  padding-block: 14px 16px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* 悬停时金线自左向右压过那条 1px 底边，和档案条目同一套笔触 */
+.about__track::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-hero-gold) 62%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms var(--ease-smooth);
+}
+
+.about__track:hover::before {
+  transform: scaleX(1);
+}
+
+.about__track-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+/* 分卷序号：12px 的「壹」笔画挤在一起，远看像一粒灰点，
+   14px + 满色鎏金才读得出是编号，而不是纸上的脏点。 */
+.about__track-no {
+  flex: 0 0 auto;
+  min-width: 1.2em;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--color-hero-label-text);
+  transition: color 260ms ease;
+}
+
+.about__track:hover .about__track-no {
+  /* 悬停加深而不是变亮：纸上小字变亮等于变糊 */
+  color: #8A651E;
+}
+
+.about__track-name {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--color-title);
+}
+
+.about__track-desc {
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.72;
+  color: var(--color-text-muted);
+}
+
+/* ── 档案卡：一张纸，上面贴照片，下面抄条目 ──────────────────────
+   取代原来的"3px 金竖线 + 白底"面板：
+   彩色左边框是通用卡片模板的默认动作，与"纸 + 线"的世界不合；
+   这里改用 1px 细线 + 纸色底，把金色收敛到相角与划线上。 */
+.about__dossier {
   width: 100%;
-  background: var(--color-neu);
-  box-shadow: var(--shadow-neu-in);
-  border-radius: var(--radius-card);
-  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-hero-paper-1);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-tag);
+}
+
+/* ── 照片位 ── */
+.about__photo {
+  position: relative;
+  margin: 0;
+}
+
+.about__mount {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-hero-paper-2) 70%, var(--color-hero-paper-1));
+  /* 悬停时整块照片被"拿起来"：位移 + 暖色投影，松手落回 */
+  transition:
+    transform 420ms var(--ease-smooth),
+    box-shadow 420ms var(--ease-smooth);
+}
+
+.about__photo:hover .about__mount {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px -20px rgba(27, 42, 78, 0.45);
+}
+
+.about__mount-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-smooth);
+}
+
+.about__photo:hover .about__mount-img {
+  transform: scale(1.035);
+}
+
+/* 空位：读作"装裱好、还空着的位置"，不是"图挂了"。
+   不用虚线框——虚线与四角金相角是两套语言，会互相打架。 */
+.about__mount-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.about__mount-rule {
+  width: 28px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-hero-gold) 55%, transparent);
+}
+
+.about__mount-label {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em; /* 抵消字距造成的右侧空白，让文字真正居中 */
+  color: var(--color-text-muted);
+}
+
+.about__mount-hint {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--color-text-muted) 76%, transparent);
+}
+
+/* 四个金色相角：用 8 段 1px 渐变画 L 形，不额外增加 DOM。
+   相角原来只对着空位（米灰纸），放上真实照片后 72% 的金线在亮蓝横幅上
+   几乎看不见——相角是"照片被卡在纸上"的唯一线索，不能丢，所以给线本身
+   加一道极淡的墨影，亮底亮图都能立住。 */
+.about__corners {
+  --c: color-mix(in srgb, var(--color-hero-gold) 72%, transparent);
+  --arm: 15px;
+  --in: 9px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 1px rgba(27, 42, 78, 0.45));
+  transition: opacity 280ms ease;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c));
+  background-size:
+    var(--arm) 1px, 1px var(--arm),
+    var(--arm) 1px, 1px var(--arm),
+    var(--arm) 1px, 1px var(--arm),
+    var(--arm) 1px, 1px var(--arm);
+  background-position:
+    left var(--in) top var(--in), left var(--in) top var(--in),
+    right var(--in) top var(--in), right var(--in) top var(--in),
+    left var(--in) bottom var(--in), left var(--in) bottom var(--in),
+    right var(--in) bottom var(--in), right var(--in) bottom var(--in);
+}
+
+.about__photo:hover .about__corners {
+  opacity: 1;
+}
+
+.about__photo-cap {
+  margin-top: var(--space-2);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+/* 朱印：本区块唯一一处朱红（DESIGN.md 规定一个区块最多一处） */
+.about__seal {
+  position: absolute;
+  right: 2px;
+  bottom: 30px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-family: var(--font-serif);
+  font-size: 12px;
+  line-height: 1.1;
+  letter-spacing: 2px;
+  color: color-mix(in srgb, var(--color-vermilion) 72%, #6E1B10);
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-vermilion) 6%, var(--color-hero-paper-1));
+  rotate: -7deg;
+  opacity: 0.9;
+  pointer-events: none;
+  transition:
+    rotate 420ms var(--ease-smooth),
+    opacity 420ms var(--ease-smooth);
+}
+
+.about__seal::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+  border-radius: 2px;
+}
+
+.about__photo:hover .about__seal {
+  rotate: -4deg;
+  opacity: 1;
+}
+
+/* ── 档案条目 ── */
+.about__facts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
 }
 
 .about__facts li {
+  position: relative;
   display: flex;
   align-items: baseline;
   gap: var(--space-3);
+  padding-block: 9px;
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.6;
+}
+
+/* 悬停时一道金线从左向右划过，像笔尖扫过这一行 */
+.about__facts li::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-hero-gold) 78%, transparent),
+    color-mix(in srgb, var(--color-hero-gold) 10%, transparent) 72%,
+    transparent
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms var(--ease-smooth);
+}
+
+.about__facts li:hover::after {
+  transform: scaleX(1);
 }
 
 .about__facts-k {
@@ -70,38 +341,86 @@
   color: var(--color-text-muted);
   font-size: 13px;
   letter-spacing: 0.04em;
+  transition: color 220ms ease;
 }
 
 .about__facts-v {
   color: var(--color-title);
   font-weight: 500;
+  transition: transform 320ms var(--ease-smooth);
 }
 
-/* 平板（640px–1023px）：两栏，事实面板变窄 */
+.about__facts li:hover .about__facts-k {
+  color: var(--color-title);
+}
+
+.about__facts li:hover .about__facts-v {
+  transform: translateX(3px);
+}
+
+/* 平板（640px–899px）：仍是单栏，档案卡限宽，避免照片被拉成巨幅。
+   条目从 640 起改为「序号+标题 / 说明」左右两列，说明铺满右格。 */
 @media (min-width: 640px) {
+  .about__dossier {
+    max-width: 420px;
+  }
+
+  .about__track {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: var(--space-4);
+    padding-block: 16px;
+  }
+
+  .about__track-desc {
+    margin-top: 0;
+  }
+}
+
+/* 桌面起（≥ 960px）：文案与档案卡并排。
+   低于 960px 不做两栏——文案会被挤到 26 字/行以下。 */
+@media (min-width: 960px) {
   .about__body {
     flex-direction: row;
-    gap: var(--space-8);
+    gap: var(--space-12);
+    /* 左栏拉到与档案卡等高，余量交给三条主线摊平（见下） */
+    align-items: stretch;
   }
 
-  .about__facts {
-    width: auto;
-    min-width: 220px;
+  .about__dossier {
+    width: 340px;
+    max-width: none;
+    flex: 0 0 auto;
     align-self: flex-start;
+  }
+
+  /* 三条目平分剩余高度：底边贴住档案卡底边，中间不留空洞 */
+  .about__tracks {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about__track {
+    /* flex-basis 归零：三条目等高，不会被长短不一的说明带出高低差 */
+    flex: 1 1 0;
+    align-items: center;
+    padding-block: var(--space-4);
   }
 }
 
-/* 桌面（≥ 1024px） */
+/* 大桌面（≥ 1024px） */
 @media (min-width: 1024px) {
   .about {
     padding-block: var(--space-32);
   }
 
   .about__body {
-    gap: var(--space-12);
+    gap: var(--space-16);
   }
 
-  .about__facts {
-    min-width: 280px;
+  .about__dossier {
+    width: 360px;
   }
 }

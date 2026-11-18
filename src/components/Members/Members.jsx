@@ -1,12 +1,12 @@
 import './Members.css'
 import Reveal from '../Reveal'
-import { members, stack } from '../../data/studio'
+import { members, stackGroups } from '../../data/studio'
 
 function Members() {
   return (
     <section className="members" id="members">
       <Reveal className="members__head">
-        <p className="members__label">02 — TEAM</p>
+        <p className="members__label"><span className="section-no">02</span> — TEAM</p>
         <h2 className="members__title">主力成员</h2>
         <p className="members__desc">24 级区块链技术应用专业，三名核心成员覆盖开发、运维与运营。</p>
       </Reveal>
@@ -15,7 +15,9 @@ function Members() {
         {members.map((member, index) => (
           <li
             key={member.id}
-            className={`member-card${member.lead ? ' member-card--lead' : ''}`}
+            className={`member-card${member.lead ? ' member-card--lead' : ''}${
+              member.photo ? '' : ' member-card--no-photo'
+            }`}
             tabIndex={0}
           >
             <Reveal delay={index * 80}>
@@ -51,11 +53,20 @@ function Members() {
 
       <Reveal className="members__stack">
         <p className="members__stack-label">技术栈</p>
-        <ul className="members__stack-list">
-          {stack.map((item) => (
-            <li key={item}>{item}</li>
+        <dl className="members__stack-groups">
+          {stackGroups.map((group) => (
+            <div className="members__stack-row" key={group.k}>
+              <dt>{group.k}</dt>
+              <dd>
+                <ul className="members__stack-list">
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
           ))}
-        </ul>
+        </dl>
       </Reveal>
     </section>
   )

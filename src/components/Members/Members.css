@@ -37,15 +37,16 @@
   gap: var(--space-6);
 }
 
-/* 玻璃拟态卡片：与全站语言一致（半透明底 + 模糊 + 白描边） */
+/* 成员卡 = 纸色面板 + 1px 细线。
+   原来是玻璃拟态（backdrop-filter + 纯白 80% 描边 + 冷投影），在浅宣纸上
+   读成"贴了一层塑料膜"：纯白描边违反 No-White，模糊也吃掉了纸的质地。
+   现在用"纸比背景亮一档"建立面板感，静态不挂阴影（Line-Before-Shadow）。 */
 .member-card {
   position: relative;
   height: 100%;
-  background: var(--color-glass);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: color-mix(in srgb, var(--color-hero-paper-1) 88%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-glass);
   overflow: hidden;
   transition:
     transform var(--dur-hover) var(--ease-smooth),
@@ -53,9 +54,9 @@
     border-color var(--dur-hover) var(--ease-smooth);
 }
 
-/* 负责人：顶部鎏金细线 + 更强阴影，视觉上先声夺人 */
+/* 负责人：顶部鎏金细线 + 金线框，视觉上先声夺人（不靠阴影抢） */
 .member-card--lead {
-  border-color: color-mix(in srgb, var(--color-hero-gold) 45%, white);
+  border-color: color-mix(in srgb, var(--color-hero-gold) 45%, transparent);
 }
 
 .member-card--lead::before {
@@ -83,6 +84,45 @@
   overflow: hidden;
 }
 
+/* ---------- 无照片：换成一枚"裱好的名章"，不写"待补" ----------
+   原来的空态是一块 431px 的奶油色 + 淡金字，读作"这两个人还没拍"。
+   现在给它一道内框（与关于区块照片位同一套装裱语言），
+   姓氏变成一枚章，空态是设计出来的，不是没做完。 */
+.member-card--no-photo .member-card__avatar {
+  /* 不要把空位刷成一块奶油色高光——那比照片更抢眼。
+     用几乎与卡面同色的薄纸，只靠内框和姓字区分。 */
+  background: transparent;
+  /* 竖排：姓 + 一道短线，读作"落款"，而不是"一个大字掉在空框里" */
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.member-card--no-photo .member-card__avatar::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 1px solid color-mix(in srgb, var(--color-hero-gold) 26%, transparent);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.member-card--no-photo .member-card__monogram {
+  font-size: 54px;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--color-hero-gold) 50%, var(--color-title));
+  opacity: 0.9;
+}
+
+/* 姓氏下面一道 32px 金线：整块读作「一枚盖上去的名章」。
+   只有一个大字悬在 4:5 的空框正中时，读起来仍像"照片没加载出来"；
+   一行极短的落款线就把它变成一张构好图的纸。 */
+.member-card--no-photo .member-card__avatar::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-hero-gold) 45%, transparent);
+}
+
 /* 无照片时的姓氏图章：大号衬线字，鎏金描边 */
 .member-card__monogram {
   font-family: var(--font-serif);
@@ -90,7 +130,8 @@
   font-weight: 700;
   line-height: 1;
   color: color-mix(in srgb, var(--color-hero-gold) 82%, var(--color-title));
-  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.7);
+  /* 原先用纯白压边，违反 No-White；改用宣纸亮部，暖度与底一致 */
+  text-shadow: 0 2px 0 color-mix(in srgb, var(--color-hero-paper-1) 70%, transparent);
   transition: transform var(--dur-hover) var(--ease-smooth);
 }
 
@@ -145,7 +186,7 @@
 .member-card__role {
   font-size: 14px;
   letter-spacing: 0.04em;
-  color: var(--color-hero-label);
+  color: var(--color-hero-label-text);
   margin-top: 2px;
   margin-bottom: var(--space-4);
 }
@@ -176,11 +217,11 @@
   border-top: 1px dashed var(--color-line);
 }
 
-/* ---------- 悬停 ---------- */
+/* ---------- 悬停：抬升 6px + 暖色投影 + 金线框（三者同时出现才成立） ---------- */
 .member-card:focus-visible {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-glass), 0 18px 40px rgba(166, 124, 46, 0.18);
-  border-color: var(--color-hero-gold);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: color-mix(in srgb, var(--color-hero-gold) 70%, transparent);
 }
 
 .member-card:focus-visible .member-card__monogram,
@@ -190,9 +231,9 @@
 
 @media (hover: hover) {
   .member-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-glass), 0 18px 40px rgba(166, 124, 46, 0.18);
-    border-color: var(--color-hero-gold);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in srgb, var(--color-hero-gold) 70%, transparent);
   }
 
   .member-card:hover .member-card__monogram,
@@ -217,11 +258,38 @@
   margin-bottom: var(--space-4);
 }
 
+.members__stack-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* 一组一行：左列组名（固定 5em，四组对齐），右列胶囊。
+   11 个胶囊平铺是"黑话墙"，分成 4 组后读作一条链路：链上 → 后端 → 前端 → AI 与硬件。 */
+.members__stack-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.members__stack-row dt {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--color-hero-label-text);
+}
+
+.members__stack-row dd {
+  margin: 0;
+}
+
 .members__stack-list {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  /* 6px 而不是 8：桌面两列时「AI 与硬件」四个胶囊正好卡在格宽边缘，
+     8px 会把 LeRobot 挤到第二行，单独吊在组名下读作排版事故。 */
+  gap: 6px;
 }
 
 .members__stack-list li {
@@ -231,12 +299,18 @@
   padding: 4px 12px;
   border-radius: var(--radius-pill);
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.55);
+  background: color-mix(in srgb, var(--color-hero-paper-1) 72%, transparent);
   border: 1px solid var(--color-line);
 }
 
 /* 平板（640px–1023px）：两列 */
 @media (min-width: 640px) {
+  .members__stack-row {
+    grid-template-columns: 6em minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
   .members__list {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-6);
@@ -253,5 +327,28 @@
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-8);
     align-items: stretch;
+  }
+
+  /* 技术栈折成 2×2：单列四行只占左边 470px，右侧 600px 空着读作"没写完"。
+     桌面这一档组名改"压在标签上方"：两列时左列 6em 的组名会把可用宽度
+     压到 362px，「AI 与硬件」四个胶囊正好差 1px 挤出一行，吊在网格里
+     像排版事故。组名上置后整格 440px，四个一行放得下，四块也等高。 */
+  .members__stack-groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-12);
+    align-content: start;
+  }
+
+  .members__stack-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+    align-content: start;
+  }
+
+  .members__stack-row dt {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--color-hero-label-text);
   }
 }

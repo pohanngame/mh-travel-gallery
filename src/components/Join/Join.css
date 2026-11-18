@@ -5,14 +5,19 @@
   border-top: 1px solid var(--color-line);
 }
 
-/* 宣纸渐变 + 细描边：与首屏 Hero 呼应，形成收束感 */
+/* 宣纸渐变 + 细描边：与首屏 Hero 呼应，形成收束感。
+   圆角从 24（--radius-image，图片专用）收到 20：它是面板，不是图片。 */
 .join__inner {
   background:
     radial-gradient(90% 120% at 0% 0%, rgba(255, 215, 130, 0.18), transparent 62%),
     linear-gradient(165deg, var(--color-hero-paper-1), var(--color-hero-paper-2));
   border: 1px solid color-mix(in srgb, var(--color-hero-gold) 28%, transparent);
-  border-radius: var(--radius-image);
+  border-radius: var(--radius-card);
   padding: var(--space-8) var(--space-6);
+  /* 收尾面板不铺满整行：内容只有左半栏，铺满会剩一大片空纸。
+     居中 + 上限 860，读作"最后一张纸"，不是"没写完的区块"。 */
+  max-width: 860px;
+  margin-inline: auto;
 }
 
 .join__label {
@@ -37,8 +42,8 @@
   font-size: 16px;
   line-height: 1.85;
   color: var(--color-text);
-  max-width: 56ch;
-  margin-bottom: var(--space-8);
+  max-width: 46ch;
+  margin-bottom: var(--space-6);
 }
 
 .join__desc strong {
@@ -47,77 +52,222 @@
   box-shadow: inset 0 -0.5em 0 color-mix(in srgb, var(--color-hero-gold) 32%, transparent);
 }
 
-.join__contacts {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
-}
-
-/* 联系卡：新拟态外凸，指针悬停微微抬起 */
-.join__card {
+/* ---------- 主入口：只有一枚真按钮 ----------
+   全站唯一的转化动作是「复制报名信息」：mailto 在没配邮件程序的 Windows 上
+   只会弹一个空白窗口，不能当主路。一个实底胶囊，其余入口都降成一行字。 */
+.join__cta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: var(--space-4) var(--space-6);
-  border-radius: var(--radius-card);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid color-mix(in srgb, var(--color-hero-gold) 30%, transparent);
-  box-shadow: 0 6px 20px rgba(166, 124, 46, 0.10);
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.join__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  /* 复制成功后文案换短（「已复制 ✓」），留出未复制时的宽度，按钮不当场缩 */
+  min-width: 176px;
+  padding: 0 var(--space-8);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--color-hero-btn-bg);
+  color: var(--color-hero-btn-text);
+  border: 1px solid transparent;
   transition:
     transform var(--dur-hover) var(--ease-smooth),
+    background-color var(--dur-hover) ease,
     box-shadow var(--dur-hover) var(--ease-smooth);
 }
 
-.join__card-k {
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-hero-label);
+.join__btn[data-state='copied'] {
+  background: color-mix(in srgb, var(--color-hero-btn-bg) 82%, var(--color-hero-gold));
 }
 
-.join__card-v {
-  font-family: var(--font-serif);
-  font-size: 19px;
-  font-weight: 600;
-  color: var(--color-title);
-  word-break: break-all;
+.join__btn-arrow {
+  transition: transform var(--dur-hover) var(--ease-smooth);
 }
 
-.join__card-hint {
+/* 状态说明：就是反馈本身。
+   13px 而不是 12px——这是"今晚就要用"的操作说明，不是装饰性小注。 */
+.join__hint {
   font-size: 13px;
+  line-height: 1.75;
   color: var(--color-text-muted);
+  max-width: 46ch;
+  margin-bottom: var(--space-4);
+}
+
+.join__hint--ok {
+  color: var(--color-title);
+}
+
+.join__hint--ok strong {
+  font-weight: 600;
+}
+
+.join__hint--warn {
+  color: var(--color-vermilion-text);
+}
+
+/* 地址：点一下整段全选。
+   复制被浏览器拦下时，这是唯一还能走通的路，所以给它 user-select: all，
+   而不是让人用鼠标一个字一个字拖。 */
+.join__addr {
+  user-select: all;
+  -webkit-user-select: all;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-title);
+}
+
+.join__hint--warn .join__addr {
+  display: block;
+  margin-top: 4px;
+  padding: 6px 10px;
+  border: 1px dashed color-mix(in srgb, var(--color-vermilion-text) 45%, transparent);
+  border-radius: var(--radius-tag);
+  color: var(--color-vermilion-text);
+}
+
+/* 次级说明：投稿通道降为一句正文，不再是并排的第二张卡 */
+.join__alt {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--color-text);
+  max-width: 46ch;
+  margin-bottom: var(--space-4);
+}
+
+.join__alt .join__addr {
+  color: var(--color-title);
+  box-shadow: inset 0 -0.5em 0 color-mix(in srgb, var(--color-hero-gold) 26%, transparent);
+}
+
+/* 可选入口并成一行：邮件 App 与 GitHub 都是"顺手"，不是主路。
+   原来它们是两个独立的块，看起来和主按钮平级，反而把主路稀释掉了。 */
+.join__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-6);
+}
+
+.join__mailto {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-hero-gold) 50%, transparent);
+  text-underline-offset: 3px;
+}
+
+/* 邮件 App 入口只对触屏有意义（点开系统邮件 App）。
+   桌面上它仍然走 mailto——没配邮件程序的电脑会弹一个空白窗口再自己关掉，
+   正是"点了新开个浏览器，里面什么都没有"。按指针类型收起来，
+   而不是留着让人踩一次。必须放在基础规则之后，否则会被 display 覆盖。 */
+@media (hover: hover) and (pointer: fine) {
+  .join__mailto {
+    display: none;
+  }
+}
+
+/* GitHub：文字链，但给自己 44px 的命中高度（原来只有 19px） */
+.join__gh {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-right: 4px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.join__gh span {
+  font-size: 12px;
+  transition: transform var(--dur-hover) var(--ease-smooth);
 }
 
 @media (hover: hover) {
-  .join__card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 32px rgba(166, 124, 46, 0.18);
+  .join__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(27, 42, 78, 0.18);
   }
 
-  .join__card:hover .join__card-v {
-    color: var(--color-primary);
+  .join__btn:hover .join__btn-arrow {
+    transform: translateX(4px);
+  }
+
+  .join__mailto:hover,
+  .join__gh:hover {
+    color: var(--color-title);
+  }
+
+  .join__gh:hover span {
+    transform: translate(2px, -2px);
   }
 }
 
-/* 平板：两张卡并排 */
+/* 平板：按钮不再拉满 */
 @media (min-width: 640px) {
-  .join__contacts {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
-  }
-
   .join__inner {
     padding: var(--space-12) var(--space-8);
   }
+
+  .join__cta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .join__btn {
+    padding-inline: var(--space-8);
+  }
 }
 
-/* 桌面 */
+/* 桌面：左文右行动。
+   内容只有半栏宽，铺满整行会剩一大片空纸；分两栏后右侧有落点，
+   主按钮落在视线末端，而不是淹没在空白里。 */
 @media (min-width: 1024px) {
   .join {
     padding-block: var(--space-32);
   }
 
   .join__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    column-gap: var(--space-16);
+    align-items: center;
+    /* 默认 stretch 会把多出来的高度摊进三行，标签与标题被拉开；
+       行高按内容、整体居中，左侧才是紧凑的一叠。 */
+    align-content: center;
+    /* 不写死显式行时，grid-row: 1 / -1 只跨到第 1 行，
+       右侧行动区会把第 1 行顶成 188px 高，标签与标题被拉开 86px。 */
+    grid-template-rows: auto auto auto;
+    max-width: none;
     padding: var(--space-16);
+  }
+
+  .join__label,
+  .join__title,
+  .join__desc {
+    grid-column: 1;
+  }
+
+  .join__side {
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+
+  .join__cta {
+    margin-bottom: var(--space-6);
   }
 }

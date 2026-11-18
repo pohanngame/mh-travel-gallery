@@ -6,7 +6,7 @@ function Resources() {
   return (
     <section className="resources" id="resources">
       <Reveal className="resources__head">
-        <p className="resources__label">03 — RESOURCES</p>
+        <p className="resources__label"><span className="section-no">03</span> — RESOURCES</p>
         <h2 className="resources__title">资源与平台</h2>
         <p className="resources__desc">
           工坊的底气来自可用的算力与场地——从链端到模型，从代码到实体装置，都能在这里跑起来。

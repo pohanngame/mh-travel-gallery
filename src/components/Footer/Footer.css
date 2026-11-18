@@ -2,7 +2,9 @@
 .footer {
   padding-block: var(--space-8);
   padding-inline: var(--page-pad);
-  border-top: 1px solid rgba(148, 163, 184, 0.35);
+  /* 分隔线用全站唯一的 Hairline（墨蓝 14%），不用冷灰实线：
+     rgba(148,163,184,.35) 是 slate 冷色，压在暖宣纸上会读成一道"打印页缝"。 */
+  border-top: 1px solid var(--color-line);
   background: transparent;
   text-align: center;
 }
@@ -18,6 +20,26 @@
   font-size: 13px;
   color: var(--color-text-muted);
   margin-bottom: var(--space-4);
+}
+
+.footer__contact a {
+  /* 13px 的行内链接触摸区域只有 19px 高。给链接本身撑到 44px，
+     文字位置不变，手指和触控板都够得着。 */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 2px;
+}
+
+.footer__top {
+  letter-spacing: 0.02em;
+}
+
+/* 邮箱是纯文字（见 Footer.jsx 注释）：不加下划线、不挂 mailto，
+   免得在页面最底部再留一条"点了弹个空白窗口"的路。 */
+.footer__mail {
+  font-variant-numeric: tabular-nums;
+  user-select: all;
 }
 
 .footer__copy {

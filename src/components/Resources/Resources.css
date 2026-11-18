@@ -37,14 +37,15 @@
   gap: var(--space-6);
 }
 
-/* 卡片：左侧竖线 + 序号，克制的编辑部式排版，与成员卡片的玻璃拟态区分开 */
+/* 卡片：纸色面板 + 1px 细线 + 序号刻线。
+   原来左侧那条 3px 金竖条是通用卡片模板的默认动作，与"纸 + 线"的语言不合，
+   同页里还和成员卡（20 圆角、无彩边）、加入卡（24 圆角）凑成三套形制。
+   金色收进序号旁那道 24px 刻线里，形制与成员卡统一，只保留圆角差（面板 8 / 卡片 20）。 */
 .resource-card {
   position: relative;
   padding: var(--space-6);
-  padding-left: var(--space-6);
-  background: rgba(255, 255, 255, 0.5);
+  background: color-mix(in srgb, var(--color-hero-paper-1) 88%, transparent);
   border: 1px solid var(--color-line);
-  border-left: 3px solid color-mix(in srgb, var(--color-hero-gold) 75%, transparent);
   border-radius: var(--radius-tag);
   transition:
     background-color var(--dur-hover) var(--ease-smooth),
@@ -53,12 +54,22 @@
 }
 
 .resource-card__index {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-serif);
   font-size: 13px;
   letter-spacing: 0.14em;
-  color: var(--color-hero-label);
+  color: var(--color-hero-label-text);
   margin-bottom: var(--space-2);
+}
+
+/* 序号右侧一道 24px 刻线：金色的位置从"边框"移到"刻度" */
+.resource-card__index::after {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-hero-gold) 55%, transparent);
 }
 
 .resource-card__title {
@@ -104,7 +115,7 @@
 
 @media (hover: hover) {
   .resource-card:hover {
-    background: rgba(255, 255, 255, 0.78);
+    background: color-mix(in srgb, var(--color-hero-paper-1) 100%, transparent);
     border-color: color-mix(in srgb, var(--color-hero-gold) 55%, transparent);
     transform: translateY(-3px);
   }
