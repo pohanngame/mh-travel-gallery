@@ -7,7 +7,7 @@
 | --- | --- |
 | 仓库 | `github.com/pohanngame/mh-travel-gallery`（fork 自 `1077553201/mh-travel-gallery`） |
 | 生产分支 | `blockchain`（不是 `main`，填错会 404） |
-| 框架预设 | `Vite` |
+| 框架预设 | `React (Vite)`（列表里**没有**单独的 `Vite` 选项；见下方说明） |
 | 构建命令 | `npm run build` |
 | 输出目录 | `dist` |
 | Node 版本 | `22`（Vite 8 要求 ≥ 20.19 / 22.12） |
@@ -31,7 +31,15 @@
 
    - **Project name**：`blockchain-workshop`（决定默认域名 `blockchain-workshop.pages.dev`，建好后不能改）
    - **Production branch**：`blockchain`
-   - **Framework preset**：`Vite`（选完构建命令与输出目录会自动填好，对一下即可）
+   - **Framework preset**：`React (Vite)`
+
+     ⚠️ 预设列表里**没有单独的 `Vite`**（官方预设表也没有）。本项目是 React + Vite，
+     应选 `React (Vite)`，它填的正是 `npm run build` + `dist`。
+     列表里紧挨着它的是 `VitePress`（`npx vitepress build` / `.vitepress/dist`）——
+     选错不会报错，Cloudflare 照样显示 Success，但线上会变成一页 VitePress 的 404。
+     判断方法：构建日志里出现 `vitepress` 就是选错了。
+
+     也可以选 `None` 后手填：Build command `npm run build`、Build output directory `dist`。
    - **Build command**：`npm run build`
    - **Build output directory**：`dist`
    - 展开 **Environment variables**，加一条 `NODE_VERSION` = `22`
@@ -86,6 +94,7 @@ npx wrangler pages deploy dist --project-name blockchain-workshop
 | 现象 | 原因 | 处理 |
 | --- | --- | --- |
 | 连接仓库时列表里找不到 `mh-travel-gallery` | Cloudflare 的 GitHub App 只授权了部分仓库 | 列表下方点 **Adjust GitHub App Permissions**（或 Configure repository access），在 GitHub 弹页里把这个仓库勾上再返回 |
+| 线上打开是一页 VitePress 的 404（页面标题 `404 \| VitePress`） | Framework preset 选成了 `VitePress` | Settings → Build configuration → 改成 `React (Vite)` → 保存 → 推一次提交重新构建 |
 | 页面 404 | 生产分支填成了 `main` | 项目设置 → Builds & deployments → 改成 `blockchain` |
 | 白屏、控制台报 `/assets/index-xxx.js` 404 | 有人给 `vite.config.js` 加了 `base: './'` 或子路径 | 删掉 `base`，保持默认（根路径部署） |
 | 构建失败：`Vite requires Node.js version 20.19+` | 没设 `NODE_VERSION` | 环境变量加 `NODE_VERSION=22`，然后 Retry deployment |
