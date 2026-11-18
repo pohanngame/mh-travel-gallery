@@ -18,11 +18,16 @@
 
 ## 方式 A：连 Git，推一次自动发一次（推荐）
 
-1. 打开 [dash.cloudflare.com](https://dash.cloudflare.com) → 左侧 **Workers & Pages** → 点右上蓝色按钮 **Create application** → 弹层里切到 **Pages** 标签 → **Connect to Git**。
-   （这版控制台左侧已经没有单独的 Pages 菜单了，Pages 收在 `Create application` 里；
-   点成 Workers 会要求写 `wrangler` 配置，不是这个项目要的。）
-2. 授权 GitHub，选中 `mh-travel-gallery` 仓库 → **Begin setup**。
-3. 按上表填写：
+1. 打开 [dash.cloudflare.com](https://dash.cloudflare.com) → 左侧 **Workers & Pages** → 点右上蓝色按钮 **Create application**。
+2. 进入的是「Make something new」卡片页，**不要点卡片里的大按钮**，翻到卡片正下方那行灰字：
+   `Need to use the legacy Pages workflow? Continue to Pages` → 点 **Continue to Pages**。
+
+   - 卡片里的 `Continue with GitHub` 是 Workers 静态资源（Workers Static Assets）路径，要求仓库里有
+     `wrangler.jsonc` 声明资源目录，本项目没有也不需要——这个站是零配置静态站，走 Pages 才不用加任何文件。
+   - 新版控制台左侧已经没有单独的 Pages 菜单，Pages 被标为 legacy 收在这个入口里。
+3. 在 Pages 引导页选 **Connect to Git**（不是 `Use direct upload`）。
+4. 授权 GitHub，选中 `mh-travel-gallery` 仓库 → **Begin setup**。
+5. 按上表填写：
 
    - **Project name**：`blockchain-workshop`（决定默认域名 `blockchain-workshop.pages.dev`，建好后不能改）
    - **Production branch**：`blockchain`
@@ -31,8 +36,8 @@
    - **Build output directory**：`dist`
    - 展开 **Environment variables**，加一条 `NODE_VERSION` = `22`
 
-4. **Save and Deploy**。首次构建约 40–90 秒，日志里出现 `✓ built in 3.1s` 就成了。
-5. 拿到 `https://blockchain-workshop.pages.dev`，手机也打开看一眼。
+6. **Save and Deploy**。首次构建约 40–90 秒，日志里出现 `✓ built in 3.1s` 就成了。
+7. 拿到 `https://blockchain-workshop.pages.dev`，手机也打开看一眼。
 
 之后**每次 `git push` 到 `blockchain` 分支，Cloudflare 都会自动重新构建并发布**，不用再做任何操作。
 推其它分支会生成预览地址（形如 `<commit>.blockchain-workshop.pages.dev`），不会影响线上。
