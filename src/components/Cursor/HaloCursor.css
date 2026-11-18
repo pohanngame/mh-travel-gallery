@@ -1,0 +1,101 @@
+/* 金色光标环 —— 只在桌面指针设备挂载（组件层已 gate）
+   两层结构，职责严格分离：
+     .halo__ring        位移层：JS 每帧写 transform，本文件里**不得**出现
+                        任何 transform 族过渡或 will-change
+     .halo__ring-line   视觉层：只吃 scale / opacity / background 的过渡
+   两者合并会互相抢占（环被冻结在旧位置、只剩点在动）。 */
+
+.halo {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  z-index: 3000;
+  pointer-events: none;
+}
+
+/* ---------- 位移层：只平移，居中靠负 margin ---------- */
+.halo__ring,
+.halo__dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* 不用 translate(-50%,-50%)：transform 里只留位移，避免与过渡叠加 */
+}
+
+.halo__ring {
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+}
+
+.halo__dot {
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+}
+
+/* ---------- 视觉层：环 ---------- */
+.halo__ring-line {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  /* 满不透明度的鎏金：浅宣纸上 72% 的金线几乎读不出来 */
+  border: 1px solid var(--color-hero-gold);
+  /* 外侧一道极淡墨线：亮纸上有轮廓，暗照片上自然消失，不抢色 */
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-title) 16%, transparent);
+  scale: 1;
+  opacity: 0;
+  transition:
+    scale 200ms var(--ease-smooth),
+    opacity 120ms ease,
+    background-color 200ms ease;
+}
+
+/* hover 交互元素：放大 + 微亮。填充只给 6% —— 再多在浅宣纸上会读成
+   "米黄实心圆盘"，盖在文字上像一块污渍。 */
+.halo[data-hot='1'] .halo__ring-line {
+  scale: 1.45;
+  background-color: color-mix(in srgb, var(--color-hero-gold) 6%, transparent);
+}
+
+/* 按下回弹：一次明确的触觉反馈，松手即恢复 */
+.halo[data-press='1'] .halo__ring-line {
+  scale: 0.82;
+}
+
+/* ---------- 视觉层：中心点 ---------- */
+.halo__dot-core {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-hero-gold);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+/* ---------- 可见性：只由 data-on 决定 ---------- */
+.halo[data-on='1'] .halo__ring-line,
+.halo[data-on='1'] .halo__dot-core {
+  opacity: 1;
+}
+
+/* 隐藏系统光标：只在环真正可见时生效（html[data-halo] 由组件在 s.has 为真时写入）。
+   环一旦隐藏，这里立刻失效、系统箭头自动回来 —— 不可能出现"没有光标"。 */
+@media (hover: hover) and (pointer: fine) {
+  html[data-halo='1'],
+  html[data-halo='1'] * {
+    cursor: none;
+  }
+}
+
+/* 减少动效：不显示光环，系统光标照常 */
+@media (prefers-reduced-motion: reduce) {
+  .halo {
+    display: none;
+  }
+  html[data-halo] * {
+    cursor: auto;
+  }
+}

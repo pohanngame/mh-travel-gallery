@@ -4,6 +4,20 @@
   padding: 0;
 }
 
+/* 只给读屏软件的文本（复制成功之类的状态播报用）。
+   不用 display:none / visibility:hidden —— 那会把内容同时从无障碍树里摘掉。 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 隐藏页面右侧滚动条（滚轮/触控滚动功能保留） */
 html,
 body {
@@ -66,7 +80,28 @@ a {
 }
 
 a:hover {
-  color: var(--color-primary);
+  color: var(--color-vermilion-text);
+}
+
+/* 键盘焦点：浏览器默认的蓝色 ring 与暖纸色系冲突，统一换成鎏金细环。
+   :focus-visible 只在键盘导航时出现，鼠标点击不触发，不影响观感。 */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-hero-gold);
+  outline-offset: 3px;
+}
+
+/* 分卷序号：六个区块的眉标统一走「衬线金色序号 — 无衬线灰标」。
+   序号是"卷次"，让题字体承担；英文标签是"说明"，保持无衬线灰。
+   两者同源不同族，靠字号与颜色拉开层级，不靠加粗。 */
+.section-no {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-hero-label-text);
+  margin-right: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -84,7 +119,6 @@ a:hover {
   .member-card:hover,
   .member-card:focus-visible,
   .resource-card:hover,
-  .join__card:hover,
   .hero__btn:hover {
     transform: none;
   }

@@ -9,7 +9,10 @@
   position: relative;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
+  /* iOS Safari 地址栏收起/展开会改变 100vh，首屏会跟着抖一次；
+     svh 取"地址栏展开时"的高度，滚动中不再变。不支持的浏览器忽略第二行。 */
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,11 +22,27 @@
   overflow: hidden;
   text-align: left; /* 文案始终左对齐 */
   background: linear-gradient(160deg, var(--color-hero-paper-1) 0%, var(--color-hero-paper-2) 100%);
+  /* 指针场默认值：JS 未接管（或触屏）时全部归零，页面与改造前完全一致 */
+  --ptr-x: -2000px;
+  --ptr-y: -2000px;
+  --ptr-nx: 0;
+  --ptr-ny: 0;
+  --ptr-art: 0;
+  --ptr-ink: 0;
+  --hero-scroll: 0;
+  /* 「牌」的三维姿态与受光：由 Hero.jsx 逐帧写入，默认全 0 = 原样 */
+  --card-rx: 0deg;
+  --card-ry: 0deg;
+  --card-tx: 0px;
+  --card-ty: 0px;
+  --sheen: 0;
+  --sheen-x: 50%;
+  --sheen-y: 50%;
 }
 
 /* 右侧画卷：absolute 铺满。
-   遮罩方向在手机与桌面必须与开机遮罩 .boot__art 完全一致，
-   否则阶段四交叉溶解时会出现可见位移（对象位置由 bootConfig.imageAlign 统一注入） */
+   左缘的羽化与纸雾由 .art-seam（styles/art-seam.css）统一提供，
+   开机遮罩 .boot__art 用的是同一份规则，因此溶解时逐像素对齐。 */
 .hero__art {
   position: absolute;
   top: 0;
@@ -31,14 +50,61 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 100%);
 }
 .hero__art img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   user-select: none;
+  transition: transform 1200ms var(--ease-smooth);
+}
+
+/* 视差包装层：只承担位移，不碰 mask / object-position，
+   因此与开机遮罩 .boot__art 的对齐关系完全不受影响。
+   进场结束前必须保持无 transform —— 否则溶解瞬间会看到画卷位移。 */
+.hero__art-parallax {
+  position: absolute;
+  inset: 0;
+}
+
+/* 进场结束后才启用：画卷随指针对向轻移 + 随滚动下沉 = 与文案分层。
+   will-change 也只在此时加 —— 进场期间不提升合成层，避免光栅化取整
+   与遮罩层的对齐产生亚像素差异。 */
+html[data-booted] .hero__art-parallax {
+  will-change: transform;
+  transform: translate3d(
+    calc(var(--ptr-nx) * var(--art-shift-x, 8px)),
+    calc(var(--ptr-ny) * var(--art-shift-y, 6px) + var(--hero-scroll) * var(--scroll-art, 24px)),
+    0
+  );
+}
+
+/* 画卷缓慢放大：给视差留出余量（永不露边），同时像"呼吸"一样活过来 */
+html[data-booted] .hero__art img {
+  transform: scale(var(--art-scale, 1.08));
+}
+
+/* 暖光：跟随指针掠过画面，模拟日光扫过校名墙。
+   固定尺寸 + transform 位移，不做渐变重绘。 */
+.hero__glow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 760px;
+  height: 760px;
+  margin: -380px 0 0 -380px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--boot-gold) 34%, transparent) 0%,
+    color-mix(in srgb, var(--boot-gold) 12%, transparent) 42%,
+    transparent 70%
+  );
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--ptr-art) * 0.95);
+  transform: translate3d(var(--ptr-x), var(--ptr-y), 0);
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 /* ---------- 文案：颜色随 --bootReveal 双态过渡（浅宣纸白 ↔ 深黛墨） ---------- */
@@ -47,9 +113,21 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.3em;
-  color: color-mix(in srgb, var(--color-hero-label) calc(var(--bootReveal, 1) * 100%), #E8C97E);
+  color: color-mix(in srgb, var(--color-hero-label-text) calc(var(--bootReveal, 1) * 100%), #E8C97E);
   transition: color 0.45s ease;
   margin-bottom: var(--space-6);
+}
+
+/* 眉标后一道金界尺：极短、向右淡出，把"英文眉标"和"中文大标题"分开 */
+.hero__label::after {
+  content: '';
+  display: inline-block;
+  width: 26px;
+  height: 1px;
+  margin-left: 8px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.55;
 }
 
 /* clamp(40px, 5.4vw, 84px)：5 字标题在桌面 28vw 文案区内不换行
@@ -93,35 +171,178 @@
   background: color-mix(in srgb, var(--color-hero-btn-bg) calc(var(--bootReveal, 1) * 100%), rgba(255, 255, 255, 0.07));
   color: var(--color-hero-btn-text);
   cursor: pointer;
+  /* 位移由 --btn-x/--btn-y 逐帧写入（磁吸），transition 不接管 transform */
+  transform: translate3d(var(--btn-x, 0px), var(--btn-y, 0px), 0);
   transition:
     color 0.45s ease,
     background-color 0.45s ease,
     border-color 0.45s ease,
-    transform var(--dur-hover) var(--ease-smooth),
     box-shadow var(--dur-hover) var(--ease-smooth);
 }
 
+/* 机构名：原来 14px 金 + opacity .72，压在红色校名字上实测 2.31:1。
+   去掉透明度，并换到"文本档"金色（4.66:1）——它是要被读的信息，不是光效。 */
 .hero__note {
   font-size: 14px;
-  color: color-mix(in srgb, var(--color-hero-label) calc(var(--bootReveal, 1) * 100%), #E8C97E);
-  opacity: 0.72;
+  color: color-mix(in srgb, var(--color-hero-label-text) calc(var(--bootReveal, 1) * 100%), #E8C97E);
   transition: color 0.45s ease;
 }
 
-/* 文案浮于画卷之上；开机期间提升到遮罩层（z-1000）之上 → 单一文字 DOM */
+/* 文案浮于画卷之上；开机期间提升到遮罩层（z-1000）之上 → 单一文字 DOM。
+   三维姿态挂在文案根上（文字与牌一起转），默认全 0 时与原样式逐像素一致。 */
 .hero__main {
   position: relative;
   z-index: 1;
+  transform: perspective(1400px) rotateX(var(--card-rx, 0deg)) rotateY(var(--card-ry, 0deg))
+    translate3d(var(--card-tx, 0px), var(--card-ty, 0px), 0);
+  transform-origin: 50% 46%;
+}
+
+/* ---------- 静止态：撤掉 3D 矩阵 ----------
+   只要文案上挂着 perspective/rotate，浏览器就会把它当合成层，
+   小字号会自动退成灰度抗锯齿（细衬线会显得发虚）。
+   指针不动时把 transform 完全摘掉，动起来才挂上 —— JS 每帧判断后切这个类。
+   （桌面端的垂直居中在下面的 @media 里恢复，务必写在那之后） */
+.hero__main.is-still {
+  transform: none;
+}
+
+/* ---------- ① 纸光：文字保护（正片用） ----------   给文案垫一层极淡的纸光，聚光掠过时不会把深色标题压成"暗底浅字"。
+   关键：必须由 --bootReveal 门控 —— 上一版漏了这一步，纸色椭圆在暗场里
+   提前显形，实测 RGB(182,182,181)、α≈0.70，就是你截图里那块"灰板子"。 */
+.hero__main::before {
+  content: '';
+  position: absolute;
+  /* 右缘不再向外扩：原 -14% 会把纸光推到画卷左缘之上，
+     正好盖住校名墙的「东」字（实测叠加 53% 纸色）。
+     收到 0 后纸光止于文案右界，与画卷左缘留出 14~170px 余量。 */
+  inset: -22% 0 -22% -20%;
+  z-index: -3;
+  pointer-events: none;
+  opacity: var(--bootReveal, 1);
+  background: radial-gradient(
+    ellipse 78% 72% at 45% 50%,
+    color-mix(in srgb, var(--color-hero-paper-1) 88%, transparent) 0%,
+    color-mix(in srgb, var(--color-hero-paper-1) 52%, transparent) 58%,
+    transparent 100%
+  );
+}
+
+/* ---------- ①b 手机/平板：给文案一张宣纸牌 ----------
+   <1024 时 .hero__art 是 width:100%，文字整个压在照片上：
+   机构名正好落在红色校名字上，实测 2.31:1。
+
+   纸洗（径向渐变）试过，椭圆走不到盒子边界就会切出一条直边；
+   改成实体纸牌——开机时本来就是一块墨玉牌，纸升起时牌化作纸，
+   是同一种"牌"的明暗两态，比凭空多出一块雾气更连贯。
+   背景透明度绑 --bootReveal：开机期间为 0（只剩墨玉牌），到位后才是纸。 */
+@media (max-width: 1023.98px) {
+  .hero__main {
+    /* 限宽 520：768 下满幅纸会把校名墙拦腰截断，读作"贴了一条横幅"；
+       收到 520 后是一张靠左的纸，墙在右侧仍然完整。 */
+    max-width: 520px;
+    padding: var(--space-6) var(--space-6) var(--space-8);
+    border-radius: 2px;
+    /* 94% 而不是实心：纸背透墨——红色校名会透出一层极淡的暖调，
+       读得出"纸下压着照片"，又不影响正文对比度。 */
+    background: color-mix(in srgb, var(--color-hero-paper-1) calc(var(--bootReveal, 1) * 94%), transparent);
+    box-shadow: 0 30px 64px -44px rgba(27, 42, 78, 0.55);
+  }
+
+  /* 牌贴着纸边：墨玉牌是纸牌外扩 10px 的同一块区域 */
+  .hero__main::after {
+    inset: -10px;
+  }
+
+  /* 纸光收掉：牌本身就是纸，再泛一圈会在牌外留一道虚边 */
+  .hero__main::before {
+    opacity: 0;
+  }
+}
+
+/* ---------- ② 墨玉牌（进场用） ----------
+   暗场里托住文案的是一块「墨玉细线框」，不是实心板：
+   22%~34% 的墨晕只负责压住背后穿过的金线，四角留金角，1px 金线框。
+   opacity = 1 - --bootReveal：纸一升起，牌就化进纸里，
+   到 3.8s 溶解瞬间严格为 0 → 与首页 Hero 逐像素一致，零跳变。 */
+.hero__main::after {
+  content: '';
+  position: absolute;
+  inset: -22px -20px -22px -22px;
+  z-index: -3;
+  pointer-events: none;
+  border: 1px solid rgba(255, 215, 130, 0.28);
+  border-radius: 3px;
+  /* 墨玉面：极深的石板色竖向渐变（受光在上），不是"灰板子"——
+     底色的作用是压住背后穿过的金线与画卷羽化边缘 */
+  background-color: rgba(14, 20, 32, 0.55);
+  /* 图层顺序：四角金角在下单前，底面渐变必须放最后（最底层） */
+  background-image:
+    linear-gradient(90deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(180deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(270deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(180deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(90deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(0deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(270deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(0deg, rgba(255, 226, 160, 0.92), rgba(255, 226, 160, 0)),
+    linear-gradient(160deg, rgba(38, 52, 72, 0.6) 0%, rgba(16, 23, 36, 0.28) 58%, rgba(8, 12, 20, 0.5) 100%);
+  background-size:
+    24px 1.5px, 1.5px 24px,
+    24px 1.5px, 1.5px 24px,
+    24px 1.5px, 1.5px 24px,
+    24px 1.5px, 1.5px 24px,
+    100% 100%;
+  background-repeat: no-repeat;
+  background-position:
+    left top, left top,
+    right top, right top,
+    left bottom, left bottom,
+    right bottom, right bottom,
+    left top;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 236, 190, 0.18),
+    inset 0 0 46px rgba(6, 10, 18, 0.55),
+    0 32px 64px -28px rgba(0, 0, 0, 0.78),
+    0 0 46px -14px rgba(255, 215, 130, 0.22);
+  opacity: calc(1 - var(--bootReveal, 1));
+}
+
+/* ---------- ③ 受光层：跟着指针在牌面 / 纸面上走 ----------
+   压在牌之上、文字之下：开机时是"牌面被手电扫过"，
+   进场后是"纸面泛起一层暖光"。强度由 --sheen 阻尼驱动。 */
+.hero__sheen {
+  position: absolute;
+  inset: -30px -26px -30px -30px;
+  z-index: -2;
+  pointer-events: none;
+  border-radius: 3px;
+  opacity: var(--sheen, 0);
+  background: radial-gradient(
+    300px circle at var(--sheen-x, 50%) var(--sheen-y, 50%),
+    rgba(255, 208, 128, 0.22) 0%,
+    rgba(255, 208, 128, 0.08) 46%,
+    transparent 72%
+  );
+  /* 边缘羽化：指针贴近牌边时，光不会在边界被切出一条直边 */
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, #000 56%, transparent 100%);
+  mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, #000 56%, transparent 100%);
+}
+
+/* 滚动分层：文案比画卷走得快一点，制造前后景分离（只用 translate 属性，
+   不影响桌面端 transform: translateY(-50%) 的垂直居中） */
+html[data-booted] .hero__main {
+  translate: 0 calc(var(--hero-scroll) * var(--scroll-text, -40px));
 }
 body.booting .hero__main {
   z-index: 1001; /* 开机期间置顶于遮罩（1000）之上：单一文字 DOM */
   /* 严禁 pointer-events: none ——「开始漫游 →」按钮在动画期间也必须可点击 */
 }
 
-/* hover 动效只在指针设备启用：上浮微动 + 鎏金光环 */
+/* hover 动效只在指针设备启用：上浮微动 + 鎏金光环（位移叠加在磁吸量上） */
 @media (hover: hover) {
   .hero__btn:hover {
-    transform: translateY(-2px);
+    transform: translate3d(var(--btn-x, 0px), calc(var(--btn-y, 0px) - 2px), 0);
     box-shadow:
       0 12px 28px rgba(27, 42, 78, 0.18),
       0 0 0 1px rgba(201, 162, 39, 0.55);
@@ -130,14 +351,30 @@ body.booting .hero__main {
 
 /* 平板（640px–1023px） */
 @media (min-width: 640px) {
+  /* 允许折行：1024–1400 宽时文案区只有 28vw≈287–392px，
+     按钮(149) + 24 + 机构名(217) = 390 放不下一行。
+     原来不折行 → 按钮被压成"认识我 / 们 →"两行。 */
   .hero__actions {
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-4) var(--space-6);
   }
 
   .hero__btn {
     width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+/* <1200：眉标 0.3em 字距会把「· 区块链工坊」挤到下一行，
+   在半角英文与汉字之间断开（1024 时断成"…· 区 / 块链工坊"）。
+   这一段收字距到 0.14em，观感几乎无差别，但一行放得下。 */
+@media (max-width: 1199.98px) {
+  .hero__label {
+    font-size: 12px;
+    letter-spacing: 0.14em;
   }
 }
 
@@ -154,9 +391,15 @@ body.booting .hero__main {
        故 z-index 1001 不会溢出到后续区块） */
   .hero__main {
     position: absolute;
-    left: 6vw;
+    /* 5vw 而非 6vw：标题宽约 27vw（5 字 × clamp 字号 + 字距），
+       6vw + 27vw = 33vw 会越过画卷左缘 32vw，末字压进羽化带；
+       5vw 让标题右缘正好收在画卷之前，字不落在半透明的边界上。 */
+    left: 5vw;
     top: 50%;
-    transform: translateY(-50%);
+    /* 垂直居中必须收进同一条 transform 里 —— 单独写 translateY 会被
+       上方的 3D 姿态覆盖，文案会掉到屏幕顶部。 */
+    transform: translateY(-50%) perspective(1400px) rotateX(var(--card-rx, 0deg))
+      rotateY(var(--card-ry, 0deg)) translate3d(var(--card-tx, 0px), var(--card-ty, 0px), 0);
     width: max-content;
     max-width: 28vw;
     margin: 0;
@@ -165,8 +408,63 @@ body.booting .hero__main {
   }
 
   /* 太和殿画卷：锁定屏幕右侧 68vw，与开机动画 .boot__art 区域 100% 重合
-     左侧 0~8% 柔和过渡融入宣纸；最右侧必须 100% black——严禁右侧 transparent 羽化！ */
+     左缘融合交给 .art-seam（35% 长羽化 + 纸雾），最右侧保持 100% 不透明 */
   .hero__art {
     width: 68vw;
+  }
+
+  /* 静止态还原：垂直居中，但不留 3D 矩阵 → 文字保持次像素抗锯齿 */
+  .hero__main.is-still {
+    transform: translateY(-50%);
+  }
+
+  /* 桌面文案区更宽，牌留白同步放大 */
+  .hero__main::after {
+    inset: -30px -26px -30px -30px;
+  }
+
+  /* 行动区改回竖排：桌面文案区宽 28vw（1440 时 390px），
+     按钮 149 + 24 + 机构名 217 = 390 正好卡满，机构名末字贴在画卷左缘，
+     读作"字跑进照片里"。竖排后机构名落在按钮下方，且与按钮左缘对齐。 */
+  .hero__actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+}
+
+/* ---------- 文案入场：错峰落位（blur → 清晰，12px 上浮到位） ----------
+   fill-mode 用 backwards 而非 both：动画结束后不留下 filter，
+   否则每段文字都会永久单独成层。 */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(9px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.hero__label,
+.hero__title,
+.hero__subtitle,
+.hero__actions {
+  animation: hero-in 880ms var(--ease-smooth) backwards;
+}
+.hero__label { animation-delay: 60ms; }
+.hero__title { animation-delay: 150ms; }
+.hero__subtitle { animation-delay: 320ms; }
+.hero__actions { animation-delay: 460ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__label,
+  .hero__title,
+  .hero__subtitle,
+  .hero__actions {
+    animation: none;
   }
 }

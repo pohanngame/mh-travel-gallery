@@ -514,6 +514,16 @@ function BootAnimationOverlay() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  /* 进场结束向外发一次信号：首页鼠标动效在溶解完成后才允许启动，
+     保证遮罩与 Hero 交叉溶解的瞬间两者逐像素一致（零跳变）。
+     纯增量：不参与任何渲染，不改变本组件的时间轴与画面。 */
+  useEffect(() => {
+    if (phase !== 'done') return
+    document.body.classList.remove('booting')
+    document.documentElement.dataset.booted = '1'
+    window.dispatchEvent(new CustomEvent('boot:done'))
+  }, [phase])
+
   if (phase === 'done') return null
 
   /* 文案策略：遮罩层不渲染任何文字 DOM。真实首页 Hero 文字（含「共 5 座城 · 持续更新中」）
@@ -528,7 +538,7 @@ function BootAnimationOverlay() {
     >
       <div className="boot__stage" ref={stageRef}>
         <div className="boot__paper" ref={paperRef} />
-        <div className="boot__art" ref={artRef}>
+        <div className="boot__art art-seam" ref={artRef}>
           <img
             className="boot__img"
             src={BOOT.imageSrc}

@@ -1,0 +1,133 @@
+/* 左区「纸下飞天」——宣纸下透出一幅敦煌飞天，指针即灯
+   ---------------------------------------------------------------
+   对齐铁律：.inkpool__ghost 与 .inkpool__tile 必须是同一个盒子尺寸
+   （36vw × 100svh，回退 100vh）+ 同一 background 参数；tile 用 translate 把原点
+   搬回 (0,0) 后与 ghost 逐像素重合，否则光斑移动时画面会"漂"。
+
+   图本身已做过「除以纸色归一化 + 亮部压平」，空白处是纯白：
+   multiply 下白=透明、画=可见，因此这里不需要任何 filter。
+   之前用原照片叠 sepia/saturate 调金色，会在光斑里烧出一块发黄色块，
+   正是"膈应"的来源。
+
+   本层只存在于桌面；手机与减少动效用户完全隐藏。 */
+
+.inkpool {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36vw;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .inkpool {
+    display: block;
+  }
+}
+
+/* ② 常驻水印：让宣纸"透"出一点颜色，但认不出画。
+   关键是「降饱和」而不是只降不透明度 —— 只降浓度的话，静止就是一张
+   半透明的完整画，光标再加深也没多少差别（这正是上一版的毛病）。 */
+.inkpool__ghost {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36vw;
+  height: 100vh;
+  height: 100svh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: var(--ink-ghost, 0.15);
+  filter: saturate(0.42) contrast(0.9);
+  mix-blend-mode: multiply;
+  /* 右缘淡出必须早于画卷左缘（32vw / 36vw = 88.9%）收干净。
+     原来收到 100% 时，32~36vw 这段仍有 26% 墨色叠在校名墙照片上，
+     把「东」字的对比压掉一截 —— 与 art-seam 的羽化叠加后才彻底看不见。 */
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 58%, transparent 88%);
+  mask-image: linear-gradient(to right, black 0%, black 58%, transparent 88%);
+}
+
+/* ③ 聚光：固定尺寸窗口 + transform 移动，不改 mask、不重绘。
+   窗口给到 640px 才有足够半径做"完全无边界"的衰减；
+   芯部占比拉高（0→24% 满强度）才有"灯芯"，而不是一片均匀的糊。 */
+.inkpool__spot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--ink-spot, 640px);
+  height: var(--ink-spot, 640px);
+  overflow: hidden;
+  border-radius: 50%;
+  opacity: calc(var(--ptr-ink, 0) * var(--ink-boost, 0.62));
+  mix-blend-mode: multiply;
+  will-change: transform, opacity;
+  transform: translate3d(
+    calc(var(--ptr-x, -1000px) - var(--ink-half, 320px)),
+    calc(var(--ptr-y, -1000px) - var(--ink-half, 320px)),
+    0
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 0%,
+    rgba(0, 0, 0, 0.94) 24%,
+    rgba(0, 0, 0, 0.62) 44%,
+    rgba(0, 0, 0, 0.3) 64%,
+    rgba(0, 0, 0, 0.09) 84%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 0%,
+    rgba(0, 0, 0, 0.94) 24%,
+    rgba(0, 0, 0, 0.62) 44%,
+    rgba(0, 0, 0, 0.3) 64%,
+    rgba(0, 0, 0, 0.09) 84%,
+    transparent 100%
+  );
+}
+
+/* 窗口内那张"整幅"墨图：尺寸与 ghost 相同，位移把原点搬回 (0,0)
+   → 与 ghost 内容完全重合，光斑移动时纸下画面相对静止。
+   提对比提饱和：照到的地方不只是"更深"，而是"更清晰、更有彩"，
+   与水印层的灰调余影形成性质差。 */
+.inkpool__tile {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36vw;
+  height: 100vh;
+  height: 100svh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: contrast(1.1) saturate(1.14);
+  will-change: transform;
+  transform: translate3d(
+    calc(var(--ink-half, 320px) - var(--ptr-x, -1000px)),
+    calc(var(--ink-half, 320px) - var(--ptr-y, -1000px)),
+    0
+  );
+}
+
+/* 宣纸颗粒：让显影有纸的质感，而不是一段光滑的图片
+   纹理随光斑移动（像贴在灯口上的纸），开销可忽略 */
+.inkpool__grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+/* 减少动效：完全不做聚光显影，只留极淡水印 */
+@media (prefers-reduced-motion: reduce) {
+  .inkpool__spot {
+    display: none;
+  }
+}

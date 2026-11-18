@@ -6,6 +6,7 @@ import Resources from './components/Resources/Resources'
 import Achievements from './components/Achievements/Achievements'
 import Join from './components/Join/Join'
 import Footer from './components/Footer/Footer'
+import HaloCursor from './components/Cursor/HaloCursor'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Achievements />
       <Join />
       <Footer />
+      <HaloCursor />
     </div>
   )
 }

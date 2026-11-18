@@ -35,17 +35,14 @@
 }
 
 /* 右侧画卷容器：原图与鎏金线稿 Canvas 同容器、同 object-fit → 严格对齐
-   遮罩方向在手机与桌面都必须与首页 .hero__art 完全一致，
-   否则阶段四交叉溶解时会出现可见位移（对象位置由 bootConfig.imageAlign 统一注入） */
+   左缘羽化与纸雾由 .art-seam（styles/art-seam.css）提供，与首页 .hero__art
+   共用同一份规则；两边只要一致，阶段四交叉溶解就不会在接缝处闪带。 */
 .boot__art {
   position: absolute;
   top: 0;
   right: 0;
   width: 100%;
   height: 100%;
-  /* 左侧 0~8% 柔和过渡融入宣纸；最右侧必须 100% black——严禁右侧 transparent 羽化！ */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 100%);
 }
 
 .boot__img,
@@ -56,6 +53,14 @@
   height: 100%;
   object-fit: cover;
   user-select: none;
+}
+
+/* 接缝纸雾（.art-seam::after 提供）在进场早期必须不可见：
+   它不继承 .boot__img 的径向显影遮罩，若常开就会在虚空背景上
+   涂出一条亮纸色竖带。用 --bootReveal 让它与画卷同步显影，
+   到阶段四溶解时恰好为 1，与首页完全一致。 */
+.boot__art::after {
+  opacity: var(--bootReveal, 0);
 }
 
 /* 原图：径向画卷显影（阶段三，--bootReveal 0→1；阶段一/二因 -30% 偏移完全隐藏） */
@@ -96,11 +101,24 @@
   pointer-events: none;
 }
 
+/* 暗角：把视线收拢到牌与画卷上，避免大片空墨显得"平"。
+   必须由 --bootReveal 收掉 —— 纸升起后还留着暗边，会在溶解瞬间闪一圈黑。 */
+.boot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: inset 0 0 220px 64px rgba(2, 6, 14, 0.62);
+  opacity: calc(1 - var(--bootReveal, 0));
+}
+
 /* ---------- 底部 HUD：呼吸提示 + 鎏金进度条 ---------- */
 .boot__hud {
   position: absolute;
   left: 50%;
   bottom: clamp(28px, 6vh, 56px);
+  z-index: 2; /* 压在暗角之上，不被压暗 */
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
