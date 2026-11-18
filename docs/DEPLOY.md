@@ -18,7 +18,9 @@
 
 ## 方式 A：连 Git，推一次自动发一次（推荐）
 
-1. 打开 [dash.cloudflare.com](https://dash.cloudflare.com) → 左侧 **Workers & Pages** → **Create** → 切到 **Pages** 标签 → **Connect to Git**。
+1. 打开 [dash.cloudflare.com](https://dash.cloudflare.com) → 左侧 **Workers & Pages** → 点右上蓝色按钮 **Create application** → 弹层里切到 **Pages** 标签 → **Connect to Git**。
+   （这版控制台左侧已经没有单独的 Pages 菜单了，Pages 收在 `Create application` 里；
+   点成 Workers 会要求写 `wrangler` 配置，不是这个项目要的。）
 2. 授权 GitHub，选中 `mh-travel-gallery` 仓库 → **Begin setup**。
 3. 按上表填写：
 
@@ -78,6 +80,7 @@ npx wrangler pages deploy dist --project-name blockchain-workshop
 
 | 现象 | 原因 | 处理 |
 | --- | --- | --- |
+| 连接仓库时列表里找不到 `mh-travel-gallery` | Cloudflare 的 GitHub App 只授权了部分仓库 | 列表下方点 **Adjust GitHub App Permissions**（或 Configure repository access），在 GitHub 弹页里把这个仓库勾上再返回 |
 | 页面 404 | 生产分支填成了 `main` | 项目设置 → Builds & deployments → 改成 `blockchain` |
 | 白屏、控制台报 `/assets/index-xxx.js` 404 | 有人给 `vite.config.js` 加了 `base: './'` 或子路径 | 删掉 `base`，保持默认（根路径部署） |
 | 构建失败：`Vite requires Node.js version 20.19+` | 没设 `NODE_VERSION` | 环境变量加 `NODE_VERSION=22`，然后 Retry deployment |
